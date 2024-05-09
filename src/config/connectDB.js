@@ -6,7 +6,7 @@ const sequelize = new Sequelize("fahasa", "root", null, {
   dialect: "mysql",
   logging: false,
 });
-const testConnection = async () => {
+const connection = async () => {
   try {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
@@ -14,4 +14,4 @@ const testConnection = async () => {
     console.error("Unable to connect to the database:", error);
   }
 };
-module.exports = testConnection;
+module.exports = connection;

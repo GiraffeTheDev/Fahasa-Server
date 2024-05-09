@@ -2,24 +2,30 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 const cors = require("cors");
-const initWebRoute = require("./routes/apiRoutes");
-const testConnection = require("./config/connectDB");
-const cookieParser = require("cookie-parser");
+const connection = require("./config/connectDB");
+const authRoute = require("./routes/auth");
 const corsOptions = {
   origin: true,
   credentials: true,
   optionSuccessStatus: 200,
 };
-app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 const port = process.env.PORT || 8000;
-initWebRoute(app);
-testConnection();
-app.use((req, res) => {
-  res.send("404 not found");
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", process.env.PORT_FRONT);
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  // Trường hợp của preflight request
+  if (req.method === "OPTIONS") {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
 });
+authRoute(app);
+connection();
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
