@@ -32,7 +32,7 @@ module.exports = {
       end_date: {
         type: Sequelize.DATE,
         allowNull: false,
-      },
+      }, 
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

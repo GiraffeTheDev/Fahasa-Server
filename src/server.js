@@ -4,6 +4,10 @@ require("dotenv").config();
 const cors = require("cors");
 const connection = require("./config/connectDB");
 const authRoute = require("./routes/auth");
+const supplierRoute = require("./routes/supplier");
+const authorRoute = require("./routes/author");
+const categoryRoute = require("./routes/category");
+const voucherRoute = require("./routes/voucher");
 const corsOptions = {
   origin: true,
   credentials: true,
@@ -25,6 +29,10 @@ app.use((req, res, next) => {
   }
 });
 authRoute(app);
+supplierRoute(app);
+authorRoute(app);
+categoryRoute(app);
+voucherRoute(app);
 connection();
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
