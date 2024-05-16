@@ -1,14 +1,22 @@
 const db = require("../models");
-const { checkMailExist, checkPhoneExist, hashPassword } = require("./common");
+const { checkMailExist, hashPassword } = require("./common");
+const { generateOtp } = require("./otp");
 const { createAccessToken, createRefreshToken } = require("./token");
-
+let otps = {};
 const registerService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const checkPhone = checkPhoneExist(data.phone);
-      if (checkPhone) {
+      if (!data.email) {
         resolve({
-          message: "Số điện thoại của bạn đã được đăng kí",
+          message: "Bạn phải nhập email",
+        });
+      }
+      const otp = generateOtp();
+      otps.email = otp;
+      const checkMail = checkMailExist(data.email);
+      if (checkMail) {
+        resolve({
+          message: "Email của bạn đã được đăng kí",
         });
       } else {
         if (data.password !== data.repassword) {
