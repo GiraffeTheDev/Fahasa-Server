@@ -9,10 +9,11 @@ const hashPassword = async (password) => {
     throw error;
   }
 };
-const checkMailExist = (email) => {
+const checkMailExist = (dataEmail) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await db.User.findOne({ email: email });
+      const response = await db.User.findOne({ where: { email: dataEmail } });
+
       if (response) {
         resolve(true);
       } else {

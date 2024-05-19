@@ -1,7 +1,7 @@
 const db = require("../models");
 const { checkMailExist, hashPassword } = require("./common");
 const { sendOtp } = require("./email");
-const { generateOtp } = require("./otp");
+const { generateOtp, generateOTP } = require("./otp");
 const { createAccessToken, createRefreshToken } = require("./token");
 
 const registerService = (data) => {
@@ -13,30 +13,22 @@ const registerService = (data) => {
         });
       }
 
-      const checkMail = checkMailExist(data.email);
+      const checkMail = await checkMailExist(data.email);
+
       if (checkMail) {
         resolve({
           message: "Email của bạn đã được đăng kí",
         });
       } else {
-        const otp = generateOtp();
+        const otp = generateOTP();
         await sendOtp(data.email, otp);
-        resolve({ message: "OTP sent to your email", otp : otp });
+        resolve({ message: "OTP sent to your email", otp: otp });
       }
     } catch (error) {
       console.log(error);
     }
   });
 };
-const verifyEmailService = (data) => {
-return new Promise(async (resolve , reject) => {
-  try {
-    if()
-  } catch (error) {
-    
-  }
-})
-}
 const loginService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
