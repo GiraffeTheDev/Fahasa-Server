@@ -63,6 +63,12 @@ const createAccountController = async (req, res) => {
 const loginController = async (req, res) => {
   try {
     const response = await loginService(req.body);
+    res.cookie("access_token", response.access_token, {
+      maxAge: 2 * 60 * 60 * 1000,
+    });
+    res.cookie("refresh_token", response.refresh_token, {
+      maxAge: 15 * 24 * 60 * 60 * 1000,
+    });
     res.status(200).json(response);
   } catch (error) {
     res.status(500).json({

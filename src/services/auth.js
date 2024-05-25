@@ -3,7 +3,7 @@ const { checkMailExist, hashPassword } = require("./common");
 const { sendOtp } = require("./email");
 const { generateOtp, generateOTP } = require("./otp");
 const { createAccessToken, createRefreshToken } = require("./token");
-
+const bcrypt = require("bcrypt");
 const registerService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -32,25 +32,26 @@ const registerService = (data) => {
 const loginService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const check = checkPhoneExist(data.phone);
+      const check = checkMailExist(data.email);
       if (check) {
-        const user = db.User.findOne({
-          phone: data.phone,
+        const user = await db.User.findOne({
+          where: { email: data.email },
         });
         if (user) {
           const payload = {
             isAdmin: user.isAdmin,
             name: user.name,
-            phone: user.phone,
+            email: user.email,
           };
           const access_token = createAccessToken(payload);
           const refresh_token = createRefreshToken(payload);
-          const check = bcrypt.compareSync(data.password, user.password);
-          if (check) {
+          const checkPass = bcrypt.compareSync(data.password, user.password);
+          if (checkPass) {
             resolve({
               access_token: access_token,
               refresh_token: refresh_token,
               message: "Đăng nhập thành công",
+              data: payload,
             });
           } else {
             resolve({

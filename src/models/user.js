@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // Model attributes are defined here
       name: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       email: {
         type: DataTypes.STRING,
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       phone: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       isAdmin: {
         type: DataTypes.BOOLEAN,
