@@ -103,8 +103,52 @@ const updateBookService = (data) => {
     } catch (error) {}
   });
 };
+const getAllBookService = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const books = await db.Book.findAll({});
+      if (books) {
+        resolve({
+          data: books,
+          message: "get all book",
+        });
+      } else {
+        resolve({
+          data: [],
+          message: "get all fail",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+const getOneBookService = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const book = await db.Book.findOne({
+        where: { id: id },
+      });
+      if (book) {
+        resolve({
+          data: book,
+          message: "get a book",
+        });
+      } else {
+        resolve({
+          data: [],
+          message: "get a fail",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createNewBookService,
   deleteBookService,
   updateBookService,
+  getAllBookService,
+  getOneBookService,
 };
