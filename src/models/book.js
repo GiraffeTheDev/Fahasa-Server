@@ -11,63 +11,63 @@ module.exports = (sequelize, DataTypes) => {
       // Model attributes are defined here
       name: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       image: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       sold: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       stock: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       price: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       rating: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       discount: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       sale: {
         type: DataTypes.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
       },
       page: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       chapter: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       description: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: true,
       },
       author_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       category_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       supplier_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       genres_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {

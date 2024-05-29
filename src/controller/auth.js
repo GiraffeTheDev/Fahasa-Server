@@ -76,9 +76,21 @@ const loginController = async (req, res) => {
     });
   }
 };
+const logoutController = async (req, res) => {
+  try {
+    res.clearCookie("access_token");
+    res.clearCookie("refresh_token");
+    res.status(200).json({
+      message: "Logout success!",
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
 module.exports = {
   loginController,
   registerController,
   verifyOTPController,
   createAccountController,
+  logoutController,
 };

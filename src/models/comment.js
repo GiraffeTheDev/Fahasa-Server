@@ -11,17 +11,16 @@ module.exports = (sequelize, DataTypes) => {
       // Model attributes are defined here
       user_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       book_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       content: {
         type: DataTypes.TEXT,
-        allowNull: false,
+        allowNull: true,
       },
-
     },
     {
       sequelize,

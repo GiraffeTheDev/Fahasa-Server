@@ -11,32 +11,32 @@ module.exports = (sequelize, DataTypes) => {
       // Model attributes are defined here
       user_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       payment_method: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       shipping_address: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       phone_receive: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       order_status: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         defaultValue: "pending",
       },
       shipping_fee: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       total_price: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {

@@ -11,27 +11,27 @@ module.exports = (sequelize, DataTypes) => {
       // Model attributes are defined here
       voucher_code: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       voucher_count: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       discount_percent: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       user_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       start_date: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       end_date: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {

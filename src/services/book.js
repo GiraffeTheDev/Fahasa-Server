@@ -17,6 +17,7 @@ const createNewBookService = (data) => {
         author_id: data.author_id,
         category_id: data.category_id,
         supplier_id: data.supplier_id,
+        genres_id: data.genres_id,
       });
       if (response) {
         resolve({

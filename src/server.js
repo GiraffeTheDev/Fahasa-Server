@@ -9,6 +9,7 @@ const supplierRoute = require("./routes/supplier");
 const authorRoute = require("./routes/author");
 const categoryRoute = require("./routes/category");
 const voucherRoute = require("./routes/voucher");
+const bookRoute = require("./routes/book");
 const corsOptions = {
   origin: true,
   credentials: true,
@@ -35,6 +36,7 @@ supplierRoute(app);
 authorRoute(app);
 categoryRoute(app);
 voucherRoute(app);
+bookRoute(app);
 connection();
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

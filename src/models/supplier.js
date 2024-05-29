@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       // Model attributes are defined here
       name: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       image: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {
