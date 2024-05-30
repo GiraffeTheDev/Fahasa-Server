@@ -76,8 +76,63 @@ const getAllCategoryServie = () => {
     }
   });
 };
+const getOneCategoryService = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const data = await db.Category.findOne({
+        where: { id: id },
+      });
+      if (data) {
+        resolve({
+          message: "Get one",
+          data: data,
+        });
+      } else {
+        resolve({
+          message: "fail",
+          data: [],
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+const updateCategoryService = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const res = await db.Category.findOne({
+        where: { id: data.id },
+        raw: true,
+      });
+      if (!res) {
+        resolve({
+          errCode: 1,
+          errorMessage: "Cate is not exist!",
+        });
+      }
+      await db.Category.update(
+        {
+          name: data.name,
+          image: data.image,
+        },
+        {
+          where: { id: data.id },
+        }
+      );
+      resolve({
+        errCode: 0,
+        message: "Update cate success",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createCategoryService,
   deleteCategoryService,
   getAllCategoryServie,
+  updateCategoryService,
+  getOneCategoryService,
 };
