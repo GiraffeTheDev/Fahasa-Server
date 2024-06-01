@@ -76,8 +76,66 @@ const getAllAuthorServie = () => {
     }
   });
 };
+const updateAuthorService = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const Author = await db.Author.findOne({
+        where: { id: data.id },
+      });
+      if (Author) {
+        const response = await db.Author.update(
+          {
+            name: data.name,
+          },
+          {
+            where: { id: data.id },
+          }
+        );
+        if (response) {
+          resolve({
+            message: "Update thành công",
+          });
+        } else {
+          resolve({
+            message: "Update thất bại",
+          });
+        }
+      } else {
+        resolve({
+          message: "404 not found",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+const getOneAuthorService = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const data = await db.Author.findOne({
+        where: { id: id },
+      });
+      if (data) {
+        resolve({
+          data: data,
+          message: "get a Author",
+        });
+      } else {
+        resolve({
+          data: [],
+          message: "get a fail",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createAuthorService,
   deleteAuthorService,
   getAllAuthorServie,
+  updateAuthorService,
+  getOneAuthorService,
 };

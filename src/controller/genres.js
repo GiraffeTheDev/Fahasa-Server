@@ -1,14 +1,14 @@
 const {
-  createAuthorService,
-  deleteAuthorService,
-  getAllAuthorServie,
-  updateAuthorService,
-  getOneAuthorService,
-} = require("../services/author");
+  deleteGenresService,
+  updateGenresService,
+  getAllGenresService,
+  createNewGenresService,
+  getOneGenresService,
+} = require("../services/genres");
 
-const createAuthorController = async (req, res) => {
+const createGenresController = async (req, res) => {
   try {
-    const response = await createAuthorService(req.body);
+    const response = await createNewGenresService(req.body);
     res.status(200).json(response);
   } catch (error) {
     res.status(500).json({
@@ -16,12 +16,12 @@ const createAuthorController = async (req, res) => {
     });
   }
 };
-const deleteAuthorController = async (req, res) => {
+const deleteGenresController = async (req, res) => {
   try {
-    const response = await deleteAuthorService(req.params.id);
+    const response = await deleteGenresService(req.params.id);
     if (!response) {
       res.status(404).json({
-        message: "Không tìm thấy tác giả",
+        message: "Không tìm thấy danh mục",
       });
     }
     res.status(200).json(response);
@@ -31,12 +31,12 @@ const deleteAuthorController = async (req, res) => {
     });
   }
 };
-const getAllAuthorController = async (req, res) => {
+const getAllGenresController = async (req, res) => {
   try {
-    const response = await getAllAuthorServie();
+    const response = await getAllGenresService();
     if (!response) {
       res.status(404).json({
-        message: "Không tìm thấy tác giả",
+        message: "Không tìm thấy danh mục",
       });
     }
     res.status(200).json(response);
@@ -46,9 +46,9 @@ const getAllAuthorController = async (req, res) => {
     });
   }
 };
-const getOneAuthorController = async (req, res) => {
+const getOneGenresController = async (req, res) => {
   try {
-    const response = await getOneAuthorService(req.params.id);
+    const response = await getOneGenresService(req.params.id);
     if (!response) {
       res.status(404).json({
         message: "Không tìm thấy danh mục",
@@ -62,9 +62,9 @@ const getOneAuthorController = async (req, res) => {
     });
   }
 };
-const updateAuthorController = async (req, res) => {
+const updateGenresController = async (req, res) => {
   try {
-    const response = await updateAuthorService(req.body);
+    const response = await updateGenresService(req.body);
     if (!response) {
       res.status(404).json({
         message: "Không tìm thấy danh mục",
@@ -78,9 +78,9 @@ const updateAuthorController = async (req, res) => {
   }
 };
 module.exports = {
-  createAuthorController,
-  deleteAuthorController,
-  getAllAuthorController,
-  getOneAuthorController,
-  updateAuthorController,
+  createGenresController,
+  deleteGenresController,
+  getAllGenresController,
+  updateGenresController,
+  getOneGenresController,
 };
