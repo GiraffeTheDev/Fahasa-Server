@@ -76,8 +76,62 @@ const getAllSupplierServie = () => {
     }
   });
 };
+const getOneSupplierService = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Supplier.findOne({
+        where: { id: id },
+      });
+      if (response) {
+        resolve({
+          data: response,
+          messgase: "Lấy tất cả nhà cung cấp thành công",
+        });
+      } else {
+        resolve({
+          data: [],
+          error: 1,
+          messgase: "Lấy nhà cung cấp không thành công",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+const updateSupplierService = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const supplier = await db.Supplier.findOne({
+        where: { id: data.id },
+      });
+      if (!supplier) {
+        resolve({
+          error: 1,
+          message: "Nhà cung cấp không tồn tại",
+        });
+      }
+      await db.Supplier.update(
+        {
+          name: data.name,
+          image: data.image,
+        },
+        {
+          where: { id: data.id },
+        }
+      );
+      resolve({
+        message: "Cập nhật thành công",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createSupplierService,
   deleteSupplierService,
   getAllSupplierServie,
+  updateSupplierService,
+  getOneSupplierService,
 };

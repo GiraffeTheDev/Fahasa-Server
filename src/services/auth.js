@@ -14,13 +14,15 @@ const registerService = (data) => {
       }
 
       const checkMail = await checkMailExist(data.email);
-
+      console.log("check mail", checkMail);
       if (checkMail) {
         resolve({
+          error: 1,
           message: "Email của bạn đã được đăng kí",
         });
       } else {
         const otp = generateOTP();
+        console.log("otp", otp);
         await sendOtp(data.email, otp);
         resolve({ message: "OTP sent to your email", otp: otp });
       }
