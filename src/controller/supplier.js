@@ -4,6 +4,7 @@ const {
   deleteSupplierService,
   getAllSupplierServie,
   getOneSupplierService,
+  updateSupplierService,
 } = require("../services/supplier");
 
 const createSupplierController = async (req, res) => {
@@ -48,9 +49,10 @@ const getAllSupplierController = async (req, res) => {
 };
 const getOneSupplierController = async (req, res) => {
   try {
-    const response = await getOneSupplierService(res.params.id);
-    return response.status(200).json(response);
+    const response = await getOneSupplierService(req.params.id);
+    return res.status(200).json(response);
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       message: "Error from Server",
     });
@@ -58,8 +60,8 @@ const getOneSupplierController = async (req, res) => {
 };
 const updateSupplierController = async (req, res) => {
   try {
-    const response = await updateCategoryService(req.body);
-    return res.status(200).json(message);
+    const response = await updateSupplierService(req.body);
+    return res.status(200).json(response);
   } catch (error) {
     console.log(error);
   }

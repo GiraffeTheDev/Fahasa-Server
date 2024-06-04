@@ -1,3 +1,5 @@
+const db = require("../models");
+
 const createVoucherService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {

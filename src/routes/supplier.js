@@ -12,7 +12,7 @@ const supplierRoute = (app) => {
   router.post("/api/v1/create-supplier", createSupplierController);
   router.delete("/api/v1/delete-supplier/:id", deleteSupplierController);
   router.get("/api/v1/suppliers", getAllSupplierController);
-  router.get("/api/v1/supplier", getOneSupplierController);
+  router.get("/api/v1/supplier/:id", getOneSupplierController);
   router.put("/api/v1/update-supplier", updateSupplierController);
   return app.use("/", router);
 };

@@ -3,6 +3,7 @@ const {
   deleteVoucherService,
   getAVoucherService,
   getAllVoucherService,
+  updateVoucherService,
 } = require("../services/voucher");
 
 const createVoucherController = async (req, res) => {
@@ -27,7 +28,8 @@ const deleteVoucherController = async (req, res) => {
 };
 const updateVoucherController = async (req, res) => {
   try {
-    const response = await updateVoucherController(req.body);
+    console.log("req", req.body);
+    const response = await updateVoucherService(req.body);
     res.status(200).json(response);
   } catch (error) {
     console.log(error);
