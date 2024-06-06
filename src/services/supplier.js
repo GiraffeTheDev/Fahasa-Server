@@ -1,5 +1,5 @@
 const db = require("../models");
-
+const { Sequelize } = require("sequelize");
 const createSupplierService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -128,10 +128,34 @@ const updateSupplierService = (data) => {
     }
   });
 };
+const searchSupplierByName = (name) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!name) {
+        resolve({
+          error: 1,
+          message: "Không có tên được nhập vào!",
+        });
+      }
+      const response = await db.Supplier.findAll({
+        where: { name: { [Sequelize.Op.like]: `%${name}%` } },
+      });
+
+      if (response) {
+        resolve({
+          data: response,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createSupplierService,
   deleteSupplierService,
   getAllSupplierServie,
   updateSupplierService,
   getOneSupplierService,
+  searchSupplierByName,
 };

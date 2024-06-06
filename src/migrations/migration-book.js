@@ -19,11 +19,11 @@ module.exports = {
       },
       sold: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       stock: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       price: {
         type: Sequelize.INTEGER,
@@ -31,27 +31,27 @@ module.exports = {
       },
       rating: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       discount: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       sale: {
         type: Sequelize.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
       },
       page: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       chapter: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       description: {
         type: Sequelize.TEXT,
-        allowNull: false,
+        allowNull: true,
       },
       author_id: {
         type: Sequelize.INTEGER,

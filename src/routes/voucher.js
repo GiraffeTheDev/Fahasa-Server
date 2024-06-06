@@ -5,6 +5,7 @@ const {
   deleteVoucherController,
   getAVoucherController,
   updateVoucherController,
+  searchVoucherByVoucherCodeController,
 } = require("../controller/voucher");
 
 const router = express.Router();
@@ -14,6 +15,7 @@ const voucherRoute = (app) => {
   router.get("/api/v1/vouchers", getAllVoucherController);
   router.get("/api/v1/voucher/:id", getAVoucherController);
   router.put("/api/v1/update-voucher", updateVoucherController);
+  router.get("/api/v1/search-voucher", searchVoucherByVoucherCodeController);
   return app.use("/", router);
 };
 module.exports = voucherRoute;

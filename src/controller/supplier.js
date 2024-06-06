@@ -5,6 +5,7 @@ const {
   getAllSupplierServie,
   getOneSupplierService,
   updateSupplierService,
+  searchSupplierByName,
 } = require("../services/supplier");
 
 const createSupplierController = async (req, res) => {
@@ -66,10 +67,21 @@ const updateSupplierController = async (req, res) => {
     console.log(error);
   }
 };
+const searchSupplierByNameController = async (req, res) => {
+  try {
+    const response = await searchSupplierByName(req.query.name);
+    res.status(200).json(response);
+  } catch (error) {
+    res.stats(500).json({
+      message: "Error from server",
+    });
+  }
+};
 module.exports = {
   createSupplierController,
   deleteSupplierController,
   getAllSupplierController,
   updateSupplierController,
   getOneSupplierController,
+  searchSupplierByNameController,
 };

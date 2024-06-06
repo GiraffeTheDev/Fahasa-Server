@@ -5,6 +5,7 @@ const {
   deleteSupplierController,
   getOneSupplierController,
   updateSupplierController,
+  searchSupplierByNameController,
 } = require("../controller/supplier");
 
 const router = express.Router();
@@ -14,6 +15,7 @@ const supplierRoute = (app) => {
   router.get("/api/v1/suppliers", getAllSupplierController);
   router.get("/api/v1/supplier/:id", getOneSupplierController);
   router.put("/api/v1/update-supplier", updateSupplierController);
+  router.get("/api/v1/search-supplier", searchSupplierByNameController);
   return app.use("/", router);
 };
 module.exports = supplierRoute;

@@ -4,6 +4,7 @@ const {
   getAllGenresService,
   createNewGenresService,
   getOneGenresService,
+  searchGenresByName,
 } = require("../services/genres");
 
 const createGenresController = async (req, res) => {
@@ -77,10 +78,21 @@ const updateGenresController = async (req, res) => {
     });
   }
 };
+const searchGenresByNameController = async (req, res) => {
+  try {
+    const response = await searchGenresByName(req.query.name);
+    res.status(200).json(response);
+  } catch (error) {
+    res.stats(500).json({
+      message: "Error from server",
+    });
+  }
+};
 module.exports = {
   createGenresController,
   deleteGenresController,
   getAllGenresController,
   updateGenresController,
   getOneGenresController,
+  searchGenresByNameController,
 };

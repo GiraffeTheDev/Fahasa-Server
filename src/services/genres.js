@@ -1,5 +1,5 @@
 const db = require("../models");
-
+const { Sequelize } = require("sequelize");
 const createNewGenresService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -125,10 +125,34 @@ const getOneGenresService = (id) => {
     }
   });
 };
+const searchGenresByName = (name) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!name) {
+        resolve({
+          error: 1,
+          message: "Không có tên được nhập vào!",
+        });
+      }
+      const response = await db.Genres.findAll({
+        where: { name: { [Sequelize.Op.like]: `%${name}%` } },
+      });
+
+      if (response) {
+        resolve({
+          data: response,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createNewGenresService,
   deleteGenresService,
   updateGenresService,
   getAllGenresService,
   getOneGenresService,
+  searchGenresByName,
 };

@@ -1,5 +1,5 @@
 const db = require("../models");
-
+const { Sequelize } = require("sequelize");
 const createNewBookService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -13,6 +13,7 @@ const createNewBookService = (data) => {
         discount: data.discount,
         sale: data.sale,
         page: data.page,
+        chapter: data.chapter,
         description: data.description,
         author_id: data.author_id,
         category_id: data.category_id,
@@ -28,7 +29,9 @@ const createNewBookService = (data) => {
           message: "Tạo mới thất bại",
         });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   });
 };
 const deleteBookService = (id) => {
@@ -64,10 +67,10 @@ const updateBookService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       const book = await db.Book.findOne({
-        where: { id: id },
+        where: { id: data.id },
       });
       if (book) {
-        const response = await db.update(
+        const response = await db.Book.update(
           {
             name: data.name,
             image: data.image,
@@ -76,6 +79,7 @@ const updateBookService = (data) => {
             price: data.price,
             rating: data.rating,
             discount: data.discount,
+            chapter: data.chapter,
             sale: data.sale,
             page: data.page,
             description: data.description,
@@ -84,7 +88,7 @@ const updateBookService = (data) => {
             supplier_id: data.supplier_id,
           },
           {
-            where: { id: id },
+            where: { id: data.id },
           }
         );
         if (response) {
@@ -101,7 +105,9 @@ const updateBookService = (data) => {
           message: "404 not found",
         });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   });
 };
 const getAllBookService = () => {
@@ -146,10 +152,33 @@ const getOneBookService = (id) => {
     }
   });
 };
+const searchBookByName = (name) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!name) {
+        resolve({
+          error: 1,
+          message: "Không có tên được nhập vào!",
+        });
+      }
+      const response = await db.Book.findAll({
+        where: { name: { [Sequelize.Op.like]: `%${name}%` } },
+      });
+      if (response) {
+        resolve({
+          data: response,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createNewBookService,
   deleteBookService,
   updateBookService,
   getAllBookService,
   getOneBookService,
+  searchBookByName,
 };

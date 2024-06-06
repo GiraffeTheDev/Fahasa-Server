@@ -4,6 +4,7 @@ const {
   getAVoucherService,
   getAllVoucherService,
   updateVoucherService,
+  searchVoucherByVoucherCode,
 } = require("../services/voucher");
 
 const createVoucherController = async (req, res) => {
@@ -28,7 +29,6 @@ const deleteVoucherController = async (req, res) => {
 };
 const updateVoucherController = async (req, res) => {
   try {
-    console.log("req", req.body);
     const response = await updateVoucherService(req.body);
     res.status(200).json(response);
   } catch (error) {
@@ -55,10 +55,20 @@ const getAVoucherController = async (req, res) => {
     });
   }
 };
+const searchVoucherByVoucherCodeController = async (req, res) => {
+  try {
+    const response = await searchVoucherByVoucherCode(req.query.voucher_code);
+    res.status(200).json(response);
+  } catch (error) {
+    res.stats(500).json({
+      message: "Error from server",
+    });
+  }
+};
 module.exports = {
   getAVoucherController,
   getAllVoucherController,
   createVoucherController,
   deleteVoucherController,
-  updateVoucherController,
+  updateVoucherController,searchVoucherByVoucherCodeController
 };

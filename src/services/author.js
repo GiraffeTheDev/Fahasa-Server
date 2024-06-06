@@ -1,5 +1,5 @@
 const db = require("../models");
-
+const { Sequelize } = require("sequelize");
 const createAuthorService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -132,10 +132,33 @@ const getOneAuthorService = (id) => {
     }
   });
 };
+const searchAuthorByName = (name) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!name) {
+        resolve({
+          error: 1,
+          message: "Không có tên được nhập vào!",
+        });
+      }
+      const response = await db.Author.findAll({
+        where: { name: { [Sequelize.Op.like]: `%${name}%` } },
+      });
+      if (response) {
+        resolve({
+          data: response,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createAuthorService,
   deleteAuthorService,
   getAllAuthorServie,
   updateAuthorService,
   getOneAuthorService,
+  searchAuthorByName,
 };

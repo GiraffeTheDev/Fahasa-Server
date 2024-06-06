@@ -4,6 +4,7 @@ const {
   getAllAuthorServie,
   updateAuthorService,
   getOneAuthorService,
+  searchAuthorByName,
 } = require("../services/author");
 
 const createAuthorController = async (req, res) => {
@@ -77,10 +78,21 @@ const updateAuthorController = async (req, res) => {
     });
   }
 };
+const searchAuthorByNameController = async (req, res) => {
+  try {
+    const response = await searchAuthorByName(req.query.name);
+    res.status(200).json(response);
+  } catch (error) {
+    res.stats(500).json({
+      message: "Error from server",
+    });
+  }
+};
 module.exports = {
   createAuthorController,
   deleteAuthorController,
   getAllAuthorController,
   getOneAuthorController,
   updateAuthorController,
+  searchAuthorByNameController,
 };

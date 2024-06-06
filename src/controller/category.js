@@ -4,6 +4,7 @@ const {
   getAllCategoryServie,
   getOneCategoryService,
   updateCategoryService,
+  searchCateByName,
 } = require("../services/category");
 
 const createCategoryController = async (req, res) => {
@@ -76,10 +77,21 @@ const updateCategoryController = async (req, res) => {
     });
   }
 };
+const searchCateByNameController = async (req, res) => {
+  try {
+    const response = await searchCateByName(req.query.name);
+    res.status(200).json(response);
+  } catch (error) {
+    res.stats(500).json({
+      message: "Error from server",
+    });
+  }
+};
 module.exports = {
   createCategoryController,
   deleteCategoryController,
   getAllCategoryController,
   updateCategoryController,
   getOneCategoryController,
+  searchCateByNameController,
 };

@@ -1,5 +1,5 @@
 const db = require("../models");
-
+const { Sequelize } = require("sequelize");
 const createCategoryService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -129,10 +129,34 @@ const updateCategoryService = (data) => {
     }
   });
 };
+const searchCateByName = (name) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!name) {
+        resolve({
+          error: 1,
+          message: "Không có tên được nhập vào!",
+        });
+      }
+      const response = await db.Category.findAll({
+        where: { name: { [Sequelize.Op.like]: `%${name}%` } },
+      });
+
+      if (response) {
+        resolve({
+          data: response,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createCategoryService,
   deleteCategoryService,
   getAllCategoryServie,
   updateCategoryService,
   getOneCategoryService,
+  searchCateByName,
 };

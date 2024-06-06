@@ -5,7 +5,9 @@ const {
   deleteCategoryController,
   updateCategoryController,
   getOneCategoryController,
+  searchCateByNameController,
 } = require("../controller/category");
+const { searchBookByNameController } = require("../controller/book");
 
 const router = express.Router();
 const categoryRoute = (app) => {
@@ -14,6 +16,7 @@ const categoryRoute = (app) => {
   router.get("/api/v1/categories", getAllCategoryController);
   router.get("/api/v1/category/:id", getOneCategoryController);
   router.put("/api/v1/update-category", updateCategoryController);
+  router.get("/api/v1/search-category", searchCateByNameController);
   return app.use("/", router);
 };
 module.exports = categoryRoute;

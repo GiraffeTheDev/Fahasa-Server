@@ -1,5 +1,5 @@
 const db = require("../models");
-
+const { Sequelize } = require("sequelize");
 const createVoucherService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -135,10 +135,34 @@ const updateVoucherService = (data) => {
     }
   });
 };
+const searchVoucherByVoucherCode = (voucher_code) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!voucher_code) {
+        resolve({
+          error: 1,
+          message: "Không có tên được nhập vào!",
+        });
+      }
+      const response = await db.Voucher.findAll({
+        where: { voucher_code: { [Sequelize.Op.like]: `%${voucher_code}%` } },
+      });
+
+      if (response) {
+        resolve({
+          data: response,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createVoucherService,
   getAllVoucherService,
   deleteVoucherService,
   updateVoucherService,
   getAVoucherService,
+  searchVoucherByVoucherCode,
 };
