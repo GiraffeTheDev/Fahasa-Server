@@ -5,6 +5,8 @@ const {
   getAllBookService,
   getOneBookService,
   searchBookByName,
+  getAllFlashSaleBook,
+  getFlashSaleBookHightlight,
 } = require("../services/book");
 
 const createNewBookController = async (req, res) => {
@@ -69,6 +71,28 @@ const searchBookByNameController = async (req, res) => {
     });
   }
 };
+const getBookFlashSaleHightlightController = async (req, res) => {
+  try {
+    const response = await getFlashSaleBookHightlight();
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error from Server",
+    });
+  }
+};
+const getAllBookFlashSaleController = async (req, res) => {
+  try {
+    const response = await getAllFlashSaleBook();
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error from Server",
+    });
+  }
+};
 module.exports = {
   createNewBookController,
   deleteBookController,
@@ -76,4 +100,6 @@ module.exports = {
   getAllBookController,
   getOneBookController,
   searchBookByNameController,
+  getBookFlashSaleHightlightController,
+  getAllBookFlashSaleController,
 };

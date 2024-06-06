@@ -1,5 +1,6 @@
 const db = require("../models");
-const { Sequelize } = require("sequelize");
+const { Sequelize, Op } = require("sequelize");
+
 const createNewBookService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -174,6 +175,60 @@ const searchBookByName = (name) => {
     }
   });
 };
+const getAllFlashSaleBook = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Book.findAll({
+        where: {
+          discount: {
+            [Op.gte]: 30,
+          },
+        },
+      });
+      if (response) {
+        resolve({
+          data: response,
+        });
+      } else {
+        resolve({
+          error: 1,
+          message: "Fail",
+          data: [],
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+const getFlashSaleBookHightlight = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Book.findAll({
+        where: {
+          discount: {
+            [Op.gte]: 30,
+          },
+        },
+        order: [["createdAt", "DESC"]],
+        limit: 5,
+      });
+      if (response) {
+        resolve({
+          data: response,
+        });
+      } else {
+        resolve({
+          error: 1,
+          message: "Fail",
+          data: [],
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createNewBookService,
   deleteBookService,
@@ -181,4 +236,6 @@ module.exports = {
   getAllBookService,
   getOneBookService,
   searchBookByName,
+  getAllFlashSaleBook,
+  getFlashSaleBookHightlight,
 };
