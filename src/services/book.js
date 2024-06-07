@@ -229,6 +229,35 @@ const getFlashSaleBookHightlight = () => {
     }
   });
 };
+const getBooksWithSupplier = (name) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!name) {
+        resolve({
+          error: 1,
+          message: "Not fount Supplier",
+        });
+      }
+      const response = await db.Book.findAll({
+        include: [
+          {
+            model: db.Supplier,
+            where: { name: name },
+            as: "SupplierData",
+          },
+        ],
+        nest: true,
+        raw: false,
+      });
+      resolve({
+        message: "Success",
+        data: response,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createNewBookService,
   deleteBookService,
@@ -238,4 +267,5 @@ module.exports = {
   searchBookByName,
   getAllFlashSaleBook,
   getFlashSaleBookHightlight,
+  getBooksWithSupplier,
 };
