@@ -5,6 +5,8 @@ const {
   createNewGenresService,
   getOneGenresService,
   searchGenresByName,
+  getAllGenresViService,
+  getAllGenresEnService,
 } = require("../services/genres");
 
 const createGenresController = async (req, res) => {
@@ -88,6 +90,38 @@ const searchGenresByNameController = async (req, res) => {
     });
   }
 };
+const getAllGenresViController = async (req, res) => {
+  try {
+    const response = await getAllGenresViService();
+    if (!response) {
+      res.status(404).json({
+        message: "Không tìm thấy danh mục",
+      });
+    }
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error from Server",
+    });
+  }
+};
+const getAllGenresEnController = async (req, res) => {
+  try {
+    const response = await getAllGenresEnService();
+    if (!response) {
+      res.status(404).json({
+        message: "Không tìm thấy danh mục",
+      });
+    }
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error from Server",
+    });
+  }
+};
 module.exports = {
   createGenresController,
   deleteGenresController,
@@ -95,4 +129,6 @@ module.exports = {
   updateGenresController,
   getOneGenresController,
   searchGenresByNameController,
+  getAllGenresViController,
+  getAllGenresEnController,
 };

@@ -136,6 +136,30 @@ const getOneBookService = (id) => {
     try {
       const book = await db.Book.findOne({
         where: { id: id },
+        include: [
+          {
+            model: db.Supplier,
+            attributes: ["name"],
+            as: "Supplier",
+          },
+          {
+            model: db.Category,
+            attributes: ["name"],
+            as: "Category",
+          },
+          {
+            model: db.Author,
+            attributes: ["name"],
+            as: "Author",
+          },
+          {
+            model: db.Genres,
+            attributes: ["name"],
+            as: "Genres",
+          },
+        ],
+        nest: true,
+        raw: false,
       });
       if (book) {
         resolve({
@@ -243,7 +267,36 @@ const getBooksWithSupplier = (name) => {
           {
             model: db.Supplier,
             where: { name: name },
-            as: "SupplierData",
+            as: "Supplier",
+          },
+        ],
+        nest: true,
+        raw: false,
+      });
+      resolve({
+        message: "Success",
+        data: response,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+const getBooksWithCategory = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!id) {
+        resolve({
+          error: 1,
+          message: "Not fount category",
+        });
+      }
+      const response = await db.Book.findAll({
+        include: [
+          {
+            model: db.Category,
+            where: { id: id },
+            as: "Category",
           },
         ],
         nest: true,
@@ -268,4 +321,5 @@ module.exports = {
   getAllFlashSaleBook,
   getFlashSaleBookHightlight,
   getBooksWithSupplier,
+  getBooksWithCategory,
 };

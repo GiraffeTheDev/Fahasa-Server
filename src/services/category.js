@@ -11,6 +11,7 @@ const createCategoryService = (data) => {
         const response = db.Category.create({
           name: data.name,
           image: data.image,
+          type: data.type,
         });
         if (response) {
           resolve({
@@ -59,7 +60,11 @@ const deleteCategoryService = (id) => {
 const getAllCategoryServie = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Category.findAll({});
+      const response = await db.Category.findAll({
+        include: [{ model: db.Genres, as: "CategoryGenres" }],
+        nest: true,
+        raw: false,
+      });
       if (response) {
         resolve({
           message: "Lất tất cả Danh mục thành công!",
@@ -115,6 +120,7 @@ const updateCategoryService = (data) => {
         {
           name: data.name,
           image: data.image,
+          type: data.type,
         },
         {
           where: { id: data.id },
@@ -152,6 +158,56 @@ const searchCateByName = (name) => {
     }
   });
 };
+const getAllCategoryVIService = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Category.findAll({
+        where: { type: "VI" },
+        include: [{ model: db.Genres, as: "CategoryGenres" }],
+        nest: true,
+        raw: false,
+      });
+      if (response) {
+        resolve({
+          message: "Lất tất cả Danh mục thành công!",
+          data: response,
+        });
+      } else {
+        resolve({
+          message: "Lất tất cả Danh mục thất bại!",
+          data: [],
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+const getAllCategoryENService = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Category.findAll({
+        where: { type: "EN" },
+        include: [{ model: db.Genres, as: "CategoryGenres" }],
+        nest: true,
+        raw: false,
+      });
+      if (response) {
+        resolve({
+          message: "Lất tất cả Danh mục thành công!",
+          data: response,
+        });
+      } else {
+        resolve({
+          message: "Lất tất cả Danh mục thất bại!",
+          data: [],
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createCategoryService,
   deleteCategoryService,
@@ -159,4 +215,6 @@ module.exports = {
   updateCategoryService,
   getOneCategoryService,
   searchCateByName,
+  getAllCategoryENService,
+  getAllCategoryVIService,
 };

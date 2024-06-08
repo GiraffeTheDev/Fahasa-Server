@@ -5,6 +5,8 @@ const {
   getOneCategoryService,
   updateCategoryService,
   searchCateByName,
+  getAllCategoryVIService,
+  getAllCategoryENService,
 } = require("../services/category");
 
 const createCategoryController = async (req, res) => {
@@ -87,6 +89,26 @@ const searchCateByNameController = async (req, res) => {
     });
   }
 };
+const getAllCategoryVIController = async (req, res) => {
+  try {
+    const response = await getAllCategoryVIService();
+    res.status(200).json(response);
+  } catch (error) {
+    res.stats(500).json({
+      message: "Error from server",
+    });
+  }
+};
+const getAllCategoryENController = async (req, res) => {
+  try {
+    const response = await getAllCategoryENService();
+    res.status(200).json(response);
+  } catch (error) {
+    res.stats(500).json({
+      message: "Error from server",
+    });
+  }
+};
 module.exports = {
   createCategoryController,
   deleteCategoryController,
@@ -94,4 +116,6 @@ module.exports = {
   updateCategoryController,
   getOneCategoryController,
   searchCateByNameController,
+  getAllCategoryVIController,
+  getAllCategoryENController,
 };

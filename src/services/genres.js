@@ -5,6 +5,7 @@ const createNewGenresService = (data) => {
     try {
       const response = await db.Genres.create({
         name: data.name,
+        category_id: data.category_id,
       });
       if (response) {
         resolve({
@@ -59,6 +60,7 @@ const updateGenresService = (data) => {
         const response = await db.Genres.update(
           {
             name: data.name,
+            category_id: data.category_id,
           },
           {
             where: { id: data.id },
@@ -108,6 +110,14 @@ const getOneGenresService = (id) => {
     try {
       const data = await db.Genres.findOne({
         where: { id: id },
+        include: [
+          {
+            model: db.Category,
+            as: "CategoryGenres",
+          },
+        ],
+        nest: true,
+        raw: false,
       });
       if (data) {
         resolve({
@@ -148,6 +158,66 @@ const searchGenresByName = (name) => {
     }
   });
 };
+const getAllGenresViService = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const data = await db.Genres.findAll({
+        include: [
+          {
+            model: db.Category,
+            where: { type: "VI" },
+            as: "CategoryGenres",
+          },
+        ],
+        nest: true,
+        raw: false,
+      });
+      if (data) {
+        resolve({
+          data: data,
+          message: "get a Genres",
+        });
+      } else {
+        resolve({
+          data: [],
+          message: "get a fail",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+const getAllGenresEnService = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const data = await db.Genres.findAll({
+        include: [
+          {
+            model: db.Category,
+            where: { type: "EN" },
+            as: "CategoryGenres",
+          },
+        ],
+        nest: true,
+        raw: false,
+      });
+      if (data) {
+        resolve({
+          data: data,
+          message: "get a Genres",
+        });
+      } else {
+        resolve({
+          data: [],
+          message: "get a fail",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createNewGenresService,
   deleteGenresService,
@@ -155,4 +225,6 @@ module.exports = {
   getAllGenresService,
   getOneGenresService,
   searchGenresByName,
+  getAllGenresViService,
+  getAllGenresEnService,
 };

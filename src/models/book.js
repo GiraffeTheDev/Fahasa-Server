@@ -5,7 +5,22 @@ module.exports = (sequelize, DataTypes) => {
       Book.belongsTo(models.Supplier, {
         foreignKey: "supplier_id",
         targetKey: "id",
-        as: "SupplierData",
+        as: "Supplier",
+      });
+      Book.belongsTo(models.Category, {
+        foreignKey: "category_id",
+        targetKey: "id",
+        as: "Category",
+      });
+      Book.belongsTo(models.Genres, {
+        foreignKey: "genres_id",
+        targetKey: "id",
+        as: "Genres",
+      });
+      Book.belongsTo(models.Author, {
+        foreignKey: "author_id",
+        targetKey: "id",
+        as: "Author",
       });
     }
   }

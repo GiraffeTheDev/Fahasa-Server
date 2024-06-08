@@ -2,7 +2,14 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Category extends Model {
     static associate(models) {
-      // define association here
+      Category.hasMany(models.Book, {
+        foreignKey: "category_id",
+        as: "Category",
+      });
+      Category.hasMany(models.Genres, {
+        foreignKey: "category_id",
+        as: "CategoryGenres",
+      });
     }
   }
 
@@ -14,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       image: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      type: {
         type: DataTypes.STRING,
         allowNull: true,
       },

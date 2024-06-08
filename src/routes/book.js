@@ -10,6 +10,7 @@ const {
   getAllBookFlashSaleController,
   getBookFlashSaleHightlightController,
   getBooksWithSupplierController,
+  getBooksWithCategoryController,
 } = require("../controller/book");
 
 const router = express.Router();
@@ -26,6 +27,7 @@ const bookRoute = (app) => {
     getBookFlashSaleHightlightController
   );
   router.get("/api/v1/book-supplier", getBooksWithSupplierController);
+  router.get("/api/v1/book-category", getBooksWithCategoryController);
   return app.use("/", router);
 };
 module.exports = bookRoute;

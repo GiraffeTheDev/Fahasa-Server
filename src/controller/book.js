@@ -8,6 +8,7 @@ const {
   getAllFlashSaleBook,
   getFlashSaleBookHightlight,
   getBooksWithSupplier,
+  getBooksWithCategory,
 } = require("../services/book");
 
 const createNewBookController = async (req, res) => {
@@ -105,6 +106,17 @@ const getBooksWithSupplierController = async (req, res) => {
     });
   }
 };
+const getBooksWithCategoryController = async (req, res) => {
+  try {
+    const response = await getBooksWithCategory(req.query.id);
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error from Server",
+    });
+  }
+};
 module.exports = {
   createNewBookController,
   deleteBookController,
@@ -115,4 +127,5 @@ module.exports = {
   getBookFlashSaleHightlightController,
   getAllBookFlashSaleController,
   getBooksWithSupplierController,
+  getBooksWithCategoryController,
 };
