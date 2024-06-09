@@ -286,28 +286,87 @@ const getBooksWithCategory = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!id) {
+        const response = await db.Book.findAll({
+          include: [
+            {
+              model: db.Category,
+              where: { type: "VI" },
+              as: "Category",
+            },
+          ],
+          nest: true,
+          raw: false,
+        });
         resolve({
-          error: 1,
-          message: "Not fount category",
+          message: "Success",
+          data: response,
+        });
+      } else {
+        const response = await db.Book.findAll({
+          include: [
+            {
+              model: db.Category,
+              where: { id: id },
+              as: "Category",
+            },
+          ],
+          nest: true,
+          raw: false,
+        });
+        resolve({
+          message: "Success",
+          data: response,
         });
       }
-      const response = await db.Book.findAll({
-        include: [
-          {
-            model: db.Category,
-            where: { id: id },
-            as: "Category",
-          },
-        ],
-        nest: true,
-        raw: false,
-      });
-      resolve({
-        message: "Success",
-        data: response,
-      });
     } catch (error) {
       console.log(error);
+    }
+  });
+};
+const queryBookWithMultiCondition = (query) => {
+  return new Promise(async (resolve, reject) => {
+    const { cateId, supId, priceRange } = query;
+    const where = {};
+    if (cateId) {
+      const cateArray = cateId.split(",").map(Number);
+      where.category_id = { [Sequelize.Op.in]: cateArray };
+    }
+    if (priceRange) {
+      const [minPrice, maxPrice] = priceRange.split("-").map(Number);
+      where.price = { [Sequelize.Op.between]: [minPrice, maxPrice] };
+    }
+
+    if (supId) {
+      const supArray = supId.split(",").map(Number);
+      where.supplier_id = { [Op.in]: supArray };
+    }
+    // Finding all books that match the 'where' conditions, including supplier details
+    const books = await db.Book.findAll({
+      where,
+      include: [
+        {
+          model: db.Supplier,
+          as: "Supplier",
+        },
+        {
+          model: db.Category,
+          as: "Category",
+        },
+      ],
+      nest: true,
+      raw: false,
+    });
+
+    // Returning the filtered list of books as a JSON response
+    if (books) {
+      resolve({
+        data: books,
+        message: "Success",
+      });
+    } else {
+      resolve({
+        message: "Fail",
+      });
     }
   });
 };
@@ -322,4 +381,5 @@ module.exports = {
   getFlashSaleBookHightlight,
   getBooksWithSupplier,
   getBooksWithCategory,
+  queryBookWithMultiCondition,
 };
