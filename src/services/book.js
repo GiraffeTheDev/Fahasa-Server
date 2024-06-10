@@ -326,10 +326,10 @@ const getBooksWithCategory = (id) => {
 const queryBookWithMultiCondition = (query) => {
   return new Promise(async (resolve, reject) => {
     const { cateId, supId, priceRange } = query;
+
     const where = {};
     if (cateId) {
-      const cateArray = cateId.split(",").map(Number);
-      where.category_id = { [Sequelize.Op.in]: cateArray };
+      where.category_id = cateId;
     }
     if (priceRange) {
       const [minPrice, maxPrice] = priceRange.split("-").map(Number);
@@ -337,8 +337,7 @@ const queryBookWithMultiCondition = (query) => {
     }
 
     if (supId) {
-      const supArray = supId.split(",").map(Number);
-      where.supplier_id = { [Op.in]: supArray };
+      where.supplier_id = supId;
     }
     // Finding all books that match the 'where' conditions, including supplier details
     const books = await db.Book.findAll({
@@ -370,6 +369,56 @@ const queryBookWithMultiCondition = (query) => {
     }
   });
 };
+const getBooksVI = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Book.findAll({
+        attributes: ["name", "id", "image", "price", "discount"],
+        include: [
+          {
+            model: db.Category,
+            attributes: ["name"],
+            where: { type: "VI" },
+            as: "Category",
+          },
+        ],
+        nest: true,
+        raw: false,
+      });
+      resolve({
+        message: "Success",
+        data: response,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+const getBooksEN = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Book.findAll({
+        attributes: ["name", "id", "image", "price", "discount"],
+        include: [
+          {
+            model: db.Category,
+            attributes: ["name"],
+            where: { type: "EN" },
+            as: "Category",
+          },
+        ],
+        nest: true,
+        raw: false,
+      });
+      resolve({
+        message: "Success",
+        data: response,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createNewBookService,
   deleteBookService,
@@ -382,4 +431,6 @@ module.exports = {
   getBooksWithSupplier,
   getBooksWithCategory,
   queryBookWithMultiCondition,
+  getBooksVI,
+  getBooksEN,
 };

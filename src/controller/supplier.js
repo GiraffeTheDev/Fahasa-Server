@@ -6,6 +6,8 @@ const {
   getOneSupplierService,
   updateSupplierService,
   searchSupplierByName,
+  getSupplierEnService,
+  getSupplierViService,
 } = require("../services/supplier");
 
 const createSupplierController = async (req, res) => {
@@ -77,6 +79,36 @@ const searchSupplierByNameController = async (req, res) => {
     });
   }
 };
+const getEnSupplierController = async (req, res) => {
+  try {
+    const response = await getSupplierEnService();
+    if (!response) {
+      res.status(404).json({
+        message: "Không tìm thấy nhà cung cấp",
+      });
+    }
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error from Server",
+    });
+  }
+};
+const getViSupplierController = async (req, res) => {
+  try {
+    const response = await getSupplierViService();
+    if (!response) {
+      res.status(404).json({
+        message: "Không tìm thấy nhà cung cấp",
+      });
+    }
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error from Server",
+    });
+  }
+};
 module.exports = {
   createSupplierController,
   deleteSupplierController,
@@ -84,4 +116,6 @@ module.exports = {
   updateSupplierController,
   getOneSupplierController,
   searchSupplierByNameController,
+  getEnSupplierController,
+  getViSupplierController,
 };

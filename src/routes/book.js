@@ -12,6 +12,8 @@ const {
   getBooksWithSupplierController,
   getBooksWithCategoryController,
   getBooksWithQueryController,
+  getBooksVIController,
+  getBooksENController,
 } = require("../controller/book");
 
 const router = express.Router();
@@ -30,6 +32,8 @@ const bookRoute = (app) => {
   router.get("/api/v1/book-supplier", getBooksWithSupplierController);
   router.get("/api/v1/book-category", getBooksWithCategoryController);
   router.get("/api/v1/book-query", getBooksWithQueryController);
+  router.get("/api/v1/book-vi", getBooksVIController);
+  router.get("/api/v1/book-en", getBooksENController);
   return app.use("/", router);
 };
 module.exports = bookRoute;

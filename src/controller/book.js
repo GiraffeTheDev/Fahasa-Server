@@ -10,6 +10,8 @@ const {
   getBooksWithSupplier,
   getBooksWithCategory,
   queryBookWithMultiCondition,
+  getBooksVI,
+  getBooksEN,
 } = require("../services/book");
 
 const createNewBookController = async (req, res) => {
@@ -129,6 +131,28 @@ const getBooksWithQueryController = async (req, res) => {
     });
   }
 };
+const getBooksVIController = async (req, res) => {
+  try {
+    const response = await getBooksVI();
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error from Server",
+    });
+  }
+};
+const getBooksENController = async (req, res) => {
+  try {
+    const response = await getBooksEN();
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error from Server",
+    });
+  }
+};
 module.exports = {
   createNewBookController,
   deleteBookController,
@@ -141,4 +165,6 @@ module.exports = {
   getBooksWithSupplierController,
   getBooksWithCategoryController,
   getBooksWithQueryController,
+  getBooksVIController,
+  getBooksENController,
 };

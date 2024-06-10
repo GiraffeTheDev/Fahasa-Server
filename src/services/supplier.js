@@ -11,6 +11,7 @@ const createSupplierService = (data) => {
         const response = db.Supplier.create({
           name: data.name,
           image: data.image,
+          original: data.original,
         });
         if (response) {
           resolve({
@@ -115,6 +116,7 @@ const updateSupplierService = (data) => {
         {
           name: data.name,
           image: data.image,
+          original: data.original,
         },
         {
           where: { id: data.id },
@@ -151,6 +153,50 @@ const searchSupplierByName = (name) => {
     }
   });
 };
+const getSupplierViService = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Supplier.findAll({
+        where: { original: "Domestic" },
+      });
+      if (response) {
+        resolve({
+          message: "Lất tất cả Nhà cung cấp thành công!",
+          data: response,
+        });
+      } else {
+        resolve({
+          message: "Lất tất cả Nhà cung cấp thất bại!",
+          data: [],
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+const getSupplierEnService = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Supplier.findAll({
+        where: { original: "Foreign" },
+      });
+      if (response) {
+        resolve({
+          message: "Lất tất cả Nhà cung cấp thành công!",
+          data: response,
+        });
+      } else {
+        resolve({
+          message: "Lất tất cả Nhà cung cấp thất bại!",
+          data: [],
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createSupplierService,
   deleteSupplierService,
@@ -158,4 +204,6 @@ module.exports = {
   updateSupplierService,
   getOneSupplierService,
   searchSupplierByName,
+  getSupplierViService,
+  getSupplierEnService,
 };
