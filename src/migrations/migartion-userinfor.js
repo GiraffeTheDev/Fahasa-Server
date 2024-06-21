@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Orders", {
+    await queryInterface.createTable("UserInformations", {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -13,20 +13,28 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      payment_method: {
+      user_name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      order_status: {
+      phone: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      shipping_fee: {
-        type: Sequelize.INTEGER,
+      province: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
-      total_price: {
-        type: Sequelize.INTEGER,
+      district: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      ward: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      address_detail: {
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       createdAt: {
@@ -40,6 +48,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Orders");
+    await queryInterface.dropTable("UserInformations");
   },
 };

@@ -44,6 +44,7 @@ const loginService = (data) => {
             isAdmin: user.isAdmin,
             name: user.name,
             email: user.email,
+            id: user.id,
           };
           const access_token = createAccessToken(payload);
           const refresh_token = createRefreshToken(payload);

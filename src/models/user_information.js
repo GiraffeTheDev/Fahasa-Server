@@ -1,42 +1,51 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class UserInformation extends Model {
     static associate(models) {
-      User.hasMany(models.UserInformation, {
+      // define association here
+      UserInformation.belongsTo(models.User, {
         foreignKey: "user_id",
+        targetKey: "id",
         as: "UserInfor",
       });
     }
   }
 
-  User.init(
+  UserInformation.init(
     {
-      // Model attributes are defined here
-      name: {
-        type: DataTypes.STRING,
+      user_id: {
+        type: DataTypes.INTEGER,
         allowNull: true,
       },
-      email: {
+      user_name: {
         type: DataTypes.STRING,
-        allowNull: false,
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       phone: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      province: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      district: {
+        type: DataTypes.STRING,
         allowNull: true,
       },
-      isAdmin: {
-        type: DataTypes.BOOLEAN,
+      ward: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      address_detail: {
+        type: DataTypes.TEXT,
         allowNull: false,
       },
     },
     {
       sequelize,
-      modelName: "User",
+      modelName: "UserInformation",
     }
   );
-  return User;
+  return UserInformation;
 };
