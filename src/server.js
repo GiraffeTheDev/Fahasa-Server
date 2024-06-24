@@ -12,6 +12,7 @@ const voucherRoute = require("./routes/voucher");
 const bookRoute = require("./routes/book");
 const genresRoute = require("./routes/genres");
 const userinforRoute = require("./routes/userinfor");
+const orderRoute = require("./routes/order");
 const corsOptions = {
   origin: true,
   credentials: true,
@@ -41,6 +42,7 @@ voucherRoute(app);
 bookRoute(app);
 genresRoute(app);
 userinforRoute(app);
+orderRoute(app);
 connection();
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

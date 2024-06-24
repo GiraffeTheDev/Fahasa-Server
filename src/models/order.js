@@ -1,44 +1,47 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class OrderDetail extends Model {
+  class Order extends Model {
     static associate(models) {
-      OrderDetail.belongsTo(models.Order, {
+      Order.hasMany(models.OrderDetail, {
         foreignKey: "order_id",
-        targetKey: "id",
         as: "DetailData",
       });
-      OrderDetail.belongsTo(models.Book, {
-        foreignKey: "book_id",
+      Order.belongsTo(models.UserInformation, {
+        foreignKey: "infor_id",
         targetKey: "id",
-        as: "Book",
+        as: "InforData",
       });
     }
   }
 
-  OrderDetail.init(
+  Order.init(
     {
       // Model attributes are defined here
-      order_id: {
+      infor_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      book_id: {
+      payment_method: {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      price: {
+      order_status: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      shipping_fee: {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      quantity: {
+      total_price: {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
     },
     {
       sequelize,
-      modelName: "OrderDetail",
+      modelName: "Order",
     }
   );
-  return OrderDetail;
+  return Order;
 };

@@ -8,6 +8,11 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "id",
         as: "UserInfor",
       });
+      UserInformation.hasMany(models.Order, {
+        foreignKey: "order_id",
+        as: "InforData",
+      });
+      
     }
   }
 
