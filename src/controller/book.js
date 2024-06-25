@@ -12,6 +12,8 @@ const {
   queryBookWithMultiCondition,
   getBooksVI,
   getBooksEN,
+  getBestSellingBookDaily,
+  getBestSellingBookWeek,
 } = require("../services/book");
 
 const createNewBookController = async (req, res) => {
@@ -153,6 +155,26 @@ const getBooksENController = async (req, res) => {
     });
   }
 };
+const getBestSellingBookDailyController = async (req, res) => {
+  try {
+    const response = await getBestSellingBookDaily();
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error from Server",
+    });
+  }
+};
+const getBestSellingBookWeekController = async (req, res) => {
+  try {
+    const response = await getBestSellingBookWeek();
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error from Server",
+    });
+  }
+};
 module.exports = {
   createNewBookController,
   deleteBookController,
@@ -167,4 +189,6 @@ module.exports = {
   getBooksWithQueryController,
   getBooksVIController,
   getBooksENController,
+  getBestSellingBookDailyController,
+  getBestSellingBookWeekController,
 };

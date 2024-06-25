@@ -3,6 +3,9 @@ const {
   getAllOrderService,
   getOneOrderService,
   updateOrderStatus,
+  getRevenuePerMonthService,
+  getCountRevenueOrderService,
+  getAllOrderWithQuery,
 } = require("../services/order");
 
 const createNewOrderController = async (req, res) => {
@@ -50,9 +53,42 @@ const updateOrderStatusController = async (req, res) => {
     });
   }
 };
+const getRevenuePerMonthController = async (req, res) => {
+  try {
+    const response = await getRevenuePerMonthService();
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error from Server",
+    });
+  }
+};
+const getCoutRevenueController = async (req, res) => {
+  try {
+    const response = await getCountRevenueOrderService();
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error from server",
+    });
+  }
+};
+const getOrderByQueryController = async (req, res) => {
+  try {
+    const response = await getAllOrderWithQuery(req.query.query);
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error from server",
+    });
+  }
+};
 module.exports = {
   createNewOrderController,
   getAllOrderController,
   getOneOrderController,
   updateOrderStatusController,
+  getRevenuePerMonthController,
+  getCoutRevenueController,
+  getOrderByQueryController,
 };

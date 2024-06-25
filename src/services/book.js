@@ -1,6 +1,6 @@
 const db = require("../models");
 const { Sequelize, Op } = require("sequelize");
-
+const moment = require("moment");
 const createNewBookService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -369,7 +369,7 @@ const queryBookWithMultiCondition = (query) => {
     }
   });
 };
-const getBooksVI = (id) => {
+const getBooksVI = () => {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await db.Book.findAll({
@@ -394,7 +394,7 @@ const getBooksVI = (id) => {
     }
   });
 };
-const getBooksEN = (id) => {
+const getBooksEN = () => {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await db.Book.findAll({
@@ -419,6 +419,108 @@ const getBooksEN = (id) => {
     }
   });
 };
+const getBestSellingBookDaily = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const startOfDay = moment().startOf("day").toDate(); // Bắt đầu của ngày hôm nay
+      const endOfDay = moment().endOf("day").toDate();
+      const response = await db.OrderDetail.findAll({
+        attributes: [
+          "book_id",
+          [
+            db.sequelize.fn("SUM", db.sequelize.col("quantity")),
+            "totalQuantity",
+          ],
+        ],
+        include: [
+          {
+            model: db.Order,
+            as: "DetailData",
+            attributes: [],
+            where: {
+              order_status: "Đã giao",
+              createdAt: {
+                [Op.between]: [startOfDay, endOfDay],
+              },
+            },
+          },
+          {
+            model: db.Book,
+            as: "Book",
+            attributes: ["image", "id", "name"],
+          },
+        ],
+        group: ["book_id"],
+        order: [[db.sequelize.literal("totalQuantity"), "DESC"]],
+        limit: 10,
+        nest: true,
+        raw: false, // Giả sử bạn muốn lấy top 10 quyển sách
+      });
+
+      resolve({
+        message: "success",
+        data: response,
+      });
+    } catch (error) {
+      console.log(error);
+      reject({
+        message: "error",
+        error,
+      });
+    }
+  });
+};
+const getBestSellingBookWeek = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const startOfWeek = moment().startOf("isoWeek").toDate();
+      const endOfWeek = moment().endOf("isoWeek").toDate();
+      const response = await db.OrderDetail.findAll({
+        attributes: [
+          "book_id",
+          [
+            db.sequelize.fn("SUM", db.sequelize.col("quantity")),
+            "totalQuantity",
+          ],
+        ],
+        include: [
+          {
+            model: db.Order,
+            as: "DetailData",
+            attributes: [],
+            where: {
+              order_status: "Đã giao",
+              createdAt: {
+                [Op.between]: [startOfWeek, endOfWeek],
+              },
+            },
+          },
+          {
+            model: db.Book,
+            as: "Book",
+            attributes: ["image", "id", "name"],
+          },
+        ],
+        group: ["book_id"],
+        order: [[db.sequelize.literal("totalQuantity"), "DESC"]],
+
+        nest: true,
+        raw: false, // Giả sử bạn muốn lấy top 10 quyển sách
+      });
+
+      resolve({
+        message: "success",
+        data: response,
+      });
+    } catch (error) {
+      console.log(error);
+      reject({
+        message: "error",
+        error,
+      });
+    }
+  });
+};
 module.exports = {
   createNewBookService,
   deleteBookService,
@@ -433,4 +535,6 @@ module.exports = {
   queryBookWithMultiCondition,
   getBooksVI,
   getBooksEN,
+  getBestSellingBookDaily,
+  getBestSellingBookWeek,
 };

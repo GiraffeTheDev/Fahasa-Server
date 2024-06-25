@@ -99,9 +99,134 @@ const updateOrderStatus = (data) => {
     }
   });
 };
+const getRevenuePerMonthService = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Order.findAll({
+        where: { order_status: "Đã giao" },
+        attributes: [
+          [
+            db.sequelize.fn(
+              "DATE_FORMAT",
+              db.sequelize.col("createdAt"),
+              "%m-%Y"
+            ),
+            "month",
+          ],
+          [
+            db.sequelize.fn("SUM", db.sequelize.col("total_price")),
+            "total_revenue",
+          ],
+        ],
+        group: [
+          db.sequelize.fn(
+            "DATE_FORMAT",
+            db.sequelize.col("createdAt"),
+            "%m-%Y"
+          ),
+        ],
+        order: [
+          [
+            db.sequelize.fn(
+              "DATE_FORMAT",
+              db.sequelize.col("createdAt"),
+              "%m-%Y"
+            ),
+            "ASC",
+          ],
+        ],
+      });
+      if (response) {
+        resolve({
+          message: "success",
+          data: response,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+const getCountRevenueOrderService = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const totalOrders = await db.Order.findAll({
+        attributes: [
+          [db.sequelize.fn("COUNT", db.sequelize.col("id")), "total_order"],
+        ],
+      });
+
+      const totalRevenue = await db.Order.findAll({
+        attributes: [
+          [
+            db.sequelize.fn("SUM", db.sequelize.col("total_price")),
+            "total_revenue",
+          ],
+        ],
+        where: {
+          order_status: "Đã giao",
+        },
+      });
+      const totalBook = await db.Book.findAll({
+        attributes: [
+          [db.sequelize.fn("COUNT", db.sequelize.col("id")), "total_book"],
+        ],
+      });
+      const total_order = totalOrders[0].total_order;
+      const total_revenue = totalRevenue[0].total_revenue;
+      const total_book = totalBook[0].total_book;
+      const result = {
+        total_order,
+        total_revenue,
+        total_book,
+      };
+      resolve({
+        data: result,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+const getAllOrderWithQuery = (query) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Order.findAll({
+        where: { order_status: query },
+        //attributes: { exclude: "order_id" },
+        attributes: ["id", "order_status", "total_price", "createdAt"],
+        include: [
+          {
+            model: db.OrderDetail,
+            as: "DetailData",
+          },
+        ],
+        nest: true,
+        raw: false,
+      });
+      if (response) {
+        resolve({
+          message: "success",
+          data: response,
+        });
+      } else {
+        resolve({
+          error: 1,
+          message: "failed",
+          data: [],
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createNewOrderService,
   getAllOrderService,
   getOneOrderService,
   updateOrderStatus,
+  getRevenuePerMonthService,
+  getCountRevenueOrderService,
+  getAllOrderWithQuery,
 };

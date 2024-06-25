@@ -4,6 +4,9 @@ const {
   getAllOrderController,
   getOneOrderController,
   updateOrderStatusController,
+  getRevenuePerMonthController,
+  getCoutRevenueController,
+  getOrderByQueryController,
 } = require("../controller/order");
 
 const router = express.Router();
@@ -12,6 +15,9 @@ const orderRoute = (app) => {
   router.get("/api/v1/orders", getAllOrderController);
   router.get("/api/v1/order/:id", getOneOrderController);
   router.put("/api/v1/update-order", updateOrderStatusController);
+  router.get("/api/v1/revenue-per-month", getRevenuePerMonthController);
+  router.get("/api/v1/count-revenue-order", getCoutRevenueController);
+  router.get("/api/v1/order-query", getOrderByQueryController);
   return app.use("/", router);
 };
 module.exports = orderRoute;
