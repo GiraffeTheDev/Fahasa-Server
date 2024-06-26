@@ -22,6 +22,11 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "id",
         as: "Author",
       });
+      Book.belongsTo(models.Publisher, {
+        foreignKey: "publisher_id",
+        targetKey: "id",
+        as: "Publisher",
+      });
       Book.hasMany(models.OrderDetail, {
         foreignKey: "book_id",
         as: "Book",

@@ -447,7 +447,6 @@ const getBestSellingBookDaily = () => {
           {
             model: db.Book,
             as: "Book",
-            attributes: ["image", "id", "name"],
           },
         ],
         group: ["book_id"],
@@ -498,7 +497,6 @@ const getBestSellingBookWeek = () => {
           {
             model: db.Book,
             as: "Book",
-            attributes: ["image", "id", "name"],
           },
         ],
         group: ["book_id"],
