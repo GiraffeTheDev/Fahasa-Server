@@ -20,6 +20,7 @@ const createNewBookService = (data) => {
         category_id: data.category_id,
         supplier_id: data.supplier_id,
         genres_id: data.genres_id,
+        publisher_id: data.publisher_id,
       });
       if (response) {
         resolve({
@@ -87,6 +88,7 @@ const updateBookService = (data) => {
             author_id: data.author_id,
             category_id: data.category_id,
             supplier_id: data.supplier_id,
+            publisher_id: data.publisher_id,
           },
           {
             where: { id: data.id },
@@ -156,6 +158,11 @@ const getOneBookService = (id) => {
             model: db.Genres,
             attributes: ["name"],
             as: "Genres",
+          },
+          {
+            model: db.Publisher,
+            attributes: ["name"],
+            as: "Publisher",
           },
         ],
         nest: true,
@@ -282,7 +289,7 @@ const getBooksWithSupplier = (name) => {
     }
   });
 };
-const getBooksWithCategory = (id) => {
+const getBooksWithCategoryVi = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!id) {
@@ -291,6 +298,47 @@ const getBooksWithCategory = (id) => {
             {
               model: db.Category,
               where: { type: "VI" },
+              as: "Category",
+            },
+          ],
+          nest: true,
+          raw: false,
+        });
+        resolve({
+          message: "Success",
+          data: response,
+        });
+      } else {
+        const response = await db.Book.findAll({
+          include: [
+            {
+              model: db.Category,
+              where: { id: id },
+              as: "Category",
+            },
+          ],
+          nest: true,
+          raw: false,
+        });
+        resolve({
+          message: "Success",
+          data: response,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+const getBooksWithCategoryEn = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!id) {
+        const response = await db.Book.findAll({
+          include: [
+            {
+              model: db.Category,
+              where: { type: "EN" },
               as: "Category",
             },
           ],
@@ -497,11 +545,38 @@ const getBestSellingBookWeek = () => {
           {
             model: db.Book,
             as: "Book",
+            include: [
+              {
+                model: db.Supplier,
+                attributes: ["name"],
+                as: "Supplier",
+              },
+              {
+                model: db.Category,
+                attributes: ["name"],
+                as: "Category",
+              },
+              {
+                model: db.Author,
+                attributes: ["name"],
+                as: "Author",
+              },
+              {
+                model: db.Genres,
+                attributes: ["name"],
+                as: "Genres",
+              },
+              {
+                model: db.Publisher,
+                attributes: ["name"],
+                as: "Publisher",
+              },
+            ],
           },
         ],
         group: ["book_id"],
         order: [[db.sequelize.literal("totalQuantity"), "DESC"]],
-
+        limit: 10,
         nest: true,
         raw: false, // Giả sử bạn muốn lấy top 10 quyển sách
       });
@@ -519,6 +594,85 @@ const getBestSellingBookWeek = () => {
     }
   });
 };
+const bookSearchWithMultiQuery = (input) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { query } = input;
+      if (!query) {
+        resolve({
+          data: [],
+        });
+      }
+      // if (name) {
+      //   where.name = { [Op.like]: `%${name}%` };
+      // }
+      // const include = [];
+      // if (author) {
+      //   include.push({
+      //     model: db.Author,
+      //     where: { name: { [Op.like]: `%${author}%` } },
+      //     as: "Author",
+      //   });
+      // }
+
+      // if (supplier) {
+      //   include.push({
+      //     model: db.Supplier,
+      //     where: { name: { [Op.like]: `%${supplier}%` } },
+      //     as: "Supplier",
+      //   });
+      // }
+      // if (publisher) {
+      //   include.push({
+      //     model: db.Publisher,
+      //     where: { name: { [Op.like]: `%${publisher}%` } },
+      //     as: "Publisher",
+      //   });
+      // }
+      const where = {
+        [Op.or]: [
+          { name: { [Op.like]: `%${query}%` } },
+          { "$Author.name$": { [Op.like]: `%${query}%` } },
+          { "$Supplier.name$": { [Op.like]: `%${query}%` } },
+          { "$Publisher.name$": { [Op.like]: `%${query}%` } },
+        ],
+      };
+      const books = await db.Book.findAll({
+        where,
+        attributes: ["image", "name", "id"],
+        include: [
+          {
+            model: db.Author,
+            as: "Author",
+            attributes: ["name"],
+          },
+          {
+            model: db.Supplier,
+            as: "Supplier",
+            attributes: ["name"],
+          },
+          {
+            model: db.Publisher,
+            as: "Publisher",
+            attributes: ["name"],
+          },
+        ],
+        limit: 6,
+        nest: true,
+        raw: false,
+      });
+
+      if (books) {
+        resolve({
+          data: books,
+          message: "success",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createNewBookService,
   deleteBookService,
@@ -529,10 +683,12 @@ module.exports = {
   getAllFlashSaleBook,
   getFlashSaleBookHightlight,
   getBooksWithSupplier,
-  getBooksWithCategory,
+  getBooksWithCategoryEn,
+  getBooksWithCategoryVi,
   queryBookWithMultiCondition,
   getBooksVI,
   getBooksEN,
   getBestSellingBookDaily,
   getBestSellingBookWeek,
+  bookSearchWithMultiQuery,
 };

@@ -14,6 +14,9 @@ const {
   getBooksEN,
   getBestSellingBookDaily,
   getBestSellingBookWeek,
+  getBooksWithCategoryVi,
+  getBooksWithCategoryEn,
+  bookSearchWithMultiQuery,
 } = require("../services/book");
 
 const createNewBookController = async (req, res) => {
@@ -111,9 +114,20 @@ const getBooksWithSupplierController = async (req, res) => {
     });
   }
 };
-const getBooksWithCategoryController = async (req, res) => {
+const getBooksWithCategoryViController = async (req, res) => {
   try {
-    const response = await getBooksWithCategory(req.query.id);
+    const response = await getBooksWithCategoryVi(req.query.id);
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error from Server",
+    });
+  }
+};
+const getBooksWithCategoryEnController = async (req, res) => {
+  try {
+    const response = await getBooksWithCategoryEn(req.query.id);
     res.status(200).json(response);
   } catch (error) {
     console.log(error);
@@ -175,6 +189,17 @@ const getBestSellingBookWeekController = async (req, res) => {
     });
   }
 };
+const getBookByMultiQueryController = async (req, res) => {
+  try {
+    const response = await bookSearchWithMultiQuery(req.query);
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error from Server",
+    });
+  }
+};
 module.exports = {
   createNewBookController,
   deleteBookController,
@@ -185,10 +210,12 @@ module.exports = {
   getBookFlashSaleHightlightController,
   getAllBookFlashSaleController,
   getBooksWithSupplierController,
-  getBooksWithCategoryController,
+  getBooksWithCategoryEnController,
+  getBooksWithCategoryViController,
   getBooksWithQueryController,
   getBooksVIController,
   getBooksENController,
   getBestSellingBookDailyController,
   getBestSellingBookWeekController,
+  getBookByMultiQueryController,
 };
