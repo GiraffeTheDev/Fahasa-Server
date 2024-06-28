@@ -12,17 +12,14 @@ const registerService = (data) => {
           message: "Bạn phải nhập email",
         });
       }
-
       const checkMail = await checkMailExist(data.email);
-      console.log("check mail", checkMail);
       if (checkMail) {
         resolve({
           error: 1,
-          message: "Email của bạn đã được đăng kí",
+          messagemail: "Email của bạn đã được đăng kí",
         });
       } else {
         const otp = generateOTP();
-        console.log("otp", otp);
         await sendOtp(data.email, otp);
         resolve({ message: "OTP sent to your email", otp: otp });
       }
@@ -34,7 +31,7 @@ const registerService = (data) => {
 const loginService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const check = checkMailExist(data.email);
+      const check = await checkMailExist(data.email);
       if (check) {
         const user = await db.User.findOne({
           where: { email: data.email },
@@ -58,12 +55,16 @@ const loginService = (data) => {
             });
           } else {
             resolve({
-              message: "Đăng nhập không thành công",
+              error: 1,
+              message: "Mật khẩu không chính xác",
             });
           }
         }
       } else {
-        resolve({ message: "Tài khoản của bạn chưa được đăng kí" });
+        resolve({
+          error: 1,
+          message: "Tài khoản của bạn chưa được đăng kí",
+        });
       }
     } catch (error) {
       console.log(error);

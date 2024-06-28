@@ -20,7 +20,7 @@ const verifyOTPController = async (req, res) => {
     const { otp } = req.body;
     const storedOTP = req.cookies.otp;
     if (!storedOTP || storedOTP !== otp) {
-      return res.status(400).json({ message: "OTP is invalid" });
+      return res.status(200).json({ error: 1, message: "OTP is invalid" });
     } else {
       res.clearCookie("otp");
       return res.status(200).json({
@@ -39,12 +39,6 @@ const createAccountController = async (req, res) => {
     if (!password) {
       return res.status(400).json({ messge: "Password is required" });
     }
-
-    // if (password !== repassword) {
-    //   return res.status(400).json({
-    //     message: "Mật khẩu bạn nhập phải trùng nhau",
-    //   });
-    // }
     const passhash = await hashPassword(password);
     console.log(passhash);
     const response = await db.User.create({
