@@ -15,6 +15,7 @@ const userinforRoute = require("./routes/userinfor");
 const orderRoute = require("./routes/order");
 const publisherRoute = require("./routes/publisher");
 const storageRoute = require("./routes/storage");
+const paypalRoute = require("./routes/paypal");
 const corsOptions = {
   origin: true,
   credentials: true,
@@ -47,6 +48,7 @@ userinforRoute(app);
 orderRoute(app);
 publisherRoute(app);
 storageRoute(app);
+paypalRoute(app);
 connection();
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

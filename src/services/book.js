@@ -486,7 +486,7 @@ const getBestSellingBookDaily = () => {
             as: "DetailData",
             attributes: [],
             where: {
-              order_status: "Đã giao",
+              // order_status: "Đã giao",
               createdAt: {
                 [Op.between]: [startOfDay, endOfDay],
               },

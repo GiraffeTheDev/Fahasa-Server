@@ -19,6 +19,23 @@ const createNewOrderService = (data) => {
         });
       });
       await Promise.all(details);
+      const updateStockBook = data.orderDetails.map(async (detail) => {
+        const book = await db.Book.findOne({
+          where: { id: detail.book_id },
+        });
+        if (book) {
+          await db.Book.update(
+            {
+              stock: book.stock - detail.quantity,
+              sold: book.sold + detail.quantity,
+            },
+            {
+              where: { id: detail.book_id },
+            }
+          );
+        }
+      });
+      await Promise.all(updateStockBook);
       resolve({
         message: "success",
       });
@@ -221,6 +238,51 @@ const getAllOrderWithQuery = (query) => {
     }
   });
 };
+const getAllOrderWithQueryUser = (query) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await db.Order.findAll({
+        where: { order_status: query.order_status },
+        attributes: ["id", "order_status", "total_price", "createdAt"],
+        include: [
+          {
+            model: db.OrderDetail,
+            as: "DetailData",
+            include: [
+              {
+                model: db.Book,
+                as: "Book",
+                attributes: ["id", "name", "image"],
+              },
+            ],
+          },
+          {
+            model: db.UserInformation,
+            as: "InforData",
+            where: { user_id: parseInt(query.user_id) },
+          },
+        ],
+
+        nest: true,
+        raw: false,
+      });
+      if (response) {
+        resolve({
+          message: "success",
+          data: response,
+        });
+      } else {
+        resolve({
+          error: 1,
+          message: "failed",
+          data: [],
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createNewOrderService,
   getAllOrderService,
@@ -229,4 +291,5 @@ module.exports = {
   getRevenuePerMonthService,
   getCountRevenueOrderService,
   getAllOrderWithQuery,
+  getAllOrderWithQueryUser,
 };

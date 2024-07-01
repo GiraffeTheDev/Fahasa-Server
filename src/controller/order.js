@@ -6,6 +6,7 @@ const {
   getRevenuePerMonthService,
   getCountRevenueOrderService,
   getAllOrderWithQuery,
+  getAllOrderWithQueryUser,
 } = require("../services/order");
 
 const createNewOrderController = async (req, res) => {
@@ -83,6 +84,17 @@ const getOrderByQueryController = async (req, res) => {
     });
   }
 };
+const getAllOrderWithQueryUserController = async (req, res) => {
+  try {
+    const response = await getAllOrderWithQueryUser(req.query);
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error from Server",
+    });
+  }
+};
 module.exports = {
   createNewOrderController,
   getAllOrderController,
@@ -91,4 +103,5 @@ module.exports = {
   getRevenuePerMonthController,
   getCoutRevenueController,
   getOrderByQueryController,
+  getAllOrderWithQueryUserController,
 };

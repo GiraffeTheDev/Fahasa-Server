@@ -38,8 +38,14 @@ const checkPhoneExist = (phone) => {
     }
   });
 };
+function convertUSDToVND(usdAmount) {
+  const exchangeRate = 23000;
+  return usdAmount * exchangeRate;
+}
+
 module.exports = {
   hashPassword,
   checkMailExist,
   checkPhoneExist,
+  convertUSDToVND,
 };
