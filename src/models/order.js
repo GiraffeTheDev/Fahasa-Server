@@ -11,6 +11,11 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "id",
         as: "InforData",
       });
+      Order.belongsTo(models.User, {
+        foreignKey: "user_id",
+        targetKey: "id",
+        as: "UserOrder",
+      });
     }
   }
 
@@ -18,6 +23,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       // Model attributes are defined here
       infor_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      user_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
       },

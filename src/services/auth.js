@@ -12,7 +12,9 @@ const registerService = (data) => {
           message: "Bạn phải nhập email",
         });
       }
+     
       const checkMail = await checkMailExist(data.email);
+   
       if (checkMail) {
         resolve({
           error: 1,
@@ -71,4 +73,32 @@ const loginService = (data) => {
     }
   });
 };
-module.exports = { registerService, loginService };
+const updatePasswordService = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log(data);
+      const passhash = await hashPassword(data.password);
+      const response = await db.User.update(
+        {
+          password: passhash,
+        },
+        {
+          where: { email: data.email },
+        }
+      );
+      if (response) {
+        resolve({
+          message: "Mật khẩu của bạn đã được cập nhật",
+        });
+      } else {
+        resolve({
+          error: 1,
+          message: "Có vấn đề xảy ra, hiện tại bạn chưa thể cập nhật mật khẩu",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+module.exports = { registerService, loginService, updatePasswordService };

@@ -146,7 +146,7 @@ const getOneBookService = (id) => {
           },
           {
             model: db.Category,
-            attributes: ["name"],
+            attributes: ["name", "type"],
             as: "Category",
           },
           {
@@ -239,6 +239,9 @@ const getFlashSaleBookHightlight = () => {
         where: {
           discount: {
             [Op.gte]: 30,
+          },
+          sold: {
+            [Op.gte]: 1,
           },
         },
         order: [["createdAt", "DESC"]],
@@ -673,6 +676,39 @@ const bookSearchWithMultiQuery = (input) => {
     }
   });
 };
+const getBookExistInComment = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const reviews = await db.Comment.findAll({
+        attributes: ["product_id"],
+        group: ["product_id"],
+      });
+
+      const productIds = reviews.map((review) => review.product_id);
+
+      const books = await db.Book.findAll({
+        where: {
+          id: productIds,
+        },
+        attributes: ["name", "id", "image"],
+        include: [
+          {
+            model: db.Comment,
+            as: "Comment",
+          },
+        ],
+        nest: true,
+        raw: false,
+      });
+      resolve({
+        message: "success",
+        data: books,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
 module.exports = {
   createNewBookService,
   deleteBookService,
@@ -691,4 +727,5 @@ module.exports = {
   getBestSellingBookDaily,
   getBestSellingBookWeek,
   bookSearchWithMultiQuery,
+  getBookExistInComment,
 };

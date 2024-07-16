@@ -3,7 +3,9 @@ const db = require("../models");
 const createNewOrderService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log(data.user_id);
       const response = await db.Order.create({
+        user_id: parseInt(data.user_id),
         infor_id: parseInt(data.infor_id),
         payment_method: data.payment_method,
         shipping_fee: data.shipping_fee,
@@ -241,41 +243,110 @@ const getAllOrderWithQuery = (query) => {
 const getAllOrderWithQueryUser = (query) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await db.Order.findAll({
-        where: { order_status: query.order_status },
-        attributes: ["id", "order_status", "total_price", "createdAt"],
+      if (query.order_status === "undefined") {
+        const response = await db.Order.findAll({
+          where: { user_id: parseInt(query.user_id) },
+          attributes: ["id", "order_status", "total_price", "createdAt"],
+          include: [
+            {
+              model: db.OrderDetail,
+              as: "DetailData",
+              include: [
+                {
+                  model: db.Book,
+                  as: "Book",
+                  attributes: ["id", "name", "image"],
+                },
+              ],
+            },
+            {
+              model: db.UserInformation,
+              as: "InforData",
+            },
+          ],
+          nest: true,
+          raw: false,
+        });
+        if (response) {
+          resolve({
+            message: "success",
+            data: response,
+          });
+        } else {
+          resolve({
+            error: 1,
+            message: "failed",
+            data: [],
+          });
+        }
+      } else {
+        const response = await db.Order.findAll({
+          where: { user_id: query.user_id, order_status: query.order_status },
+          attributes: ["id", "order_status", "total_price", "createdAt"],
+          include: [
+            {
+              model: db.OrderDetail,
+              as: "DetailData",
+              include: [
+                {
+                  model: db.Book,
+                  as: "Book",
+                  attributes: ["id", "name", "image"],
+                },
+              ],
+            },
+            {
+              model: db.UserInformation,
+              as: "InforData",
+            },
+          ],
+          nest: true,
+          raw: false,
+        });
+        if (response) {
+          resolve({
+            message: "success",
+            data: response,
+          });
+        } else {
+          resolve({
+            error: 1,
+            message: "failed",
+            data: [],
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+const getPurchasedBook = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const hasPurchased = await db.OrderDetail.findOne({
+        where: { book_id: data.book_id },
         include: [
           {
-            model: db.OrderDetail,
+            model: db.Order,
             as: "DetailData",
-            include: [
-              {
-                model: db.Book,
-                as: "Book",
-                attributes: ["id", "name", "image"],
-              },
-            ],
-          },
-          {
-            model: db.UserInformation,
-            as: "InforData",
-            where: { user_id: parseInt(query.user_id) },
+            attributes: ["id", "user_id"],
+            where: { user_id: data.user_id },
           },
         ],
-
         nest: true,
         raw: false,
       });
-      if (response) {
+      if (!hasPurchased) {
         resolve({
-          message: "success",
-          data: response,
+          purchased: false,
+          error: 1,
+          message: "Bạn phải mua sản phẩm mới có thể đánh giá sản phẩm",
         });
       } else {
         resolve({
-          error: 1,
-          message: "failed",
-          data: [],
+          purchased: true,
+          message: "success",
         });
       }
     } catch (error) {
@@ -292,4 +363,5 @@ module.exports = {
   getCountRevenueOrderService,
   getAllOrderWithQuery,
   getAllOrderWithQueryUser,
+  getPurchasedBook,
 };

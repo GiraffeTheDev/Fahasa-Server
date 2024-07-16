@@ -4,14 +4,7 @@ const convertVNDToUSD = (amountVND) => {
   const exchangeRate = parseInt(23000);
   return (parseInt(amountVND) / exchangeRate).toFixed(2);
 };
-function calculateTotalItemsPrice(orderDetails) {
-  let total = 0;
-  for (let detail of orderDetails) {
-    total +=
-      (detail.price - (detail.price * detail.discount) / 100) * detail.quantity;
-  }
-  return total;
-}
+
 const createPayment = async (total, orderDetails) => {
   const totalUSD = convertVNDToUSD(total);
   const create_payment_json = {

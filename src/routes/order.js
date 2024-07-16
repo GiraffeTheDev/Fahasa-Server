@@ -8,6 +8,7 @@ const {
   getCoutRevenueController,
   getOrderByQueryController,
   getAllOrderWithQueryUserController,
+  getPurchasedBookController,
 } = require("../controller/order");
 
 const router = express.Router();
@@ -20,6 +21,7 @@ const orderRoute = (app) => {
   router.get("/api/v1/count-revenue-order", getCoutRevenueController);
   router.get("/api/v1/order-query", getOrderByQueryController);
   router.get("/api/v1/order-query-user", getAllOrderWithQueryUserController);
+  router.get("/api/v1/book-purchased", getPurchasedBookController);
   return app.use("/", router);
 };
 module.exports = orderRoute;

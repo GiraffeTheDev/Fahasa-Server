@@ -7,6 +7,7 @@ const {
   getCountRevenueOrderService,
   getAllOrderWithQuery,
   getAllOrderWithQueryUser,
+  getPurchasedBook,
 } = require("../services/order");
 
 const createNewOrderController = async (req, res) => {
@@ -95,6 +96,17 @@ const getAllOrderWithQueryUserController = async (req, res) => {
     });
   }
 };
+const getPurchasedBookController = async (req, res) => {
+  try {
+  
+    const response = await getPurchasedBook(req.query);
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error from Server",
+    });
+  }
+};
 module.exports = {
   createNewOrderController,
   getAllOrderController,
@@ -104,4 +116,5 @@ module.exports = {
   getCoutRevenueController,
   getOrderByQueryController,
   getAllOrderWithQueryUserController,
+  getPurchasedBookController,
 };
