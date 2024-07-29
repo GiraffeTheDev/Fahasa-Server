@@ -51,6 +51,16 @@ const getAllOrderService = () => {
     try {
       const response = await db.Order.findAll({
         attributes: ["id", "total_price", "createdAt", "order_status"],
+        order: [
+          [
+            db.sequelize.fn(
+              "DATE_FORMAT",
+              db.sequelize.col("createdAt"),
+              "%d-%m-%Y"
+            ),
+            "DESC",
+          ],
+        ],
       });
       if (response) {
         resolve({

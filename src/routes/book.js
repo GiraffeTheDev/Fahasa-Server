@@ -24,7 +24,7 @@ const {
 const router = express.Router();
 const bookRoute = (app) => {
   router.post("/api/v1/create-book", createNewBookController);
-  router.delete("/api/v1/delete-book/:id", deleteBookController);
+  router.put("/api/v1/delete-book", deleteBookController);
   router.put("/api/v1/update-book", updateBookController);
   router.get("/api/v1/book/:id", getOneBookController);
   router.get("/api/v1/books", getAllBookController);

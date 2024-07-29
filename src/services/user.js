@@ -62,6 +62,12 @@ const getOneUserService = (id) => {
 const updateUserRoleService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
+      if (!data.id || !data.isAdmin) {
+        resolve({
+          error: 1,
+          message: "fail",
+        });
+      }
       const user = await db.User.findOne({
         where: { id: data.id },
         raw: false,
@@ -76,6 +82,13 @@ const updateUserRoleService = (data) => {
         if (response) {
           resolve({
             message: "success",
+          });
+        }
+      } else {
+        if (response) {
+          resolve({
+            error: 1,
+            message: "fail",
           });
         }
       }

@@ -36,18 +36,21 @@ const createNewBookService = (data) => {
     }
   });
 };
-const deleteBookService = (id) => {
+const deleteBookService = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       const book = await db.Book.findOne({
-        where: { id: id },
+        where: { id: data.id },
       });
       if (book) {
-        const response = await db.Book.destroy({
-          where: {
-            id: id,
+        const response = await db.Book.update(
+          {
+            deleted: data.deleted,
           },
-        });
+          {
+            where: { id: data.id },
+          }
+        );
         if (response) {
           resolve({
             message: "Xóa thành công",
@@ -213,6 +216,9 @@ const getAllFlashSaleBook = () => {
         where: {
           discount: {
             [Op.gte]: 30,
+          },
+          stock: {
+            [Op.gt]: 0,
           },
         },
       });
@@ -539,7 +545,7 @@ const getBestSellingBookWeek = () => {
             as: "DetailData",
             attributes: [],
             where: {
-              order_status: "Đã giao",
+              //order_status: "Đã giao",
               createdAt: {
                 [Op.between]: [startOfWeek, endOfWeek],
               },
@@ -581,9 +587,8 @@ const getBestSellingBookWeek = () => {
         order: [[db.sequelize.literal("totalQuantity"), "DESC"]],
         limit: 10,
         nest: true,
-        raw: false, // Giả sử bạn muốn lấy top 10 quyển sách
+        raw: false,
       });
-
       resolve({
         message: "success",
         data: response,
